@@ -199,12 +199,23 @@
         font-size: large;
         border-radius: 10px;
       }
+
+      @media screen and (max-width: 980px) {
+        .result_box {
+          display: grid; 
+        }
+      }
     </style>
   </head>
   <body>
     <div class="dropContainer" id="c1">
       <label for="input_file" id="drop_box">
-        <input type="file" id="input_file" accept="image/png, image/jpeg" hidden />
+        <input
+          type="file"
+          id="input_file"
+          accept="image/png, image/jpeg"
+          hidden
+        />
         <div class="inner_content">
           <div id="show_selection"></div>
           <div id="in_text">
@@ -215,7 +226,7 @@
               Drag and Drop or click here <br />
               to upload image
             </p>
-            <span> Upload any image from desktop </span>
+            <span> Upload (png, jpg or jpeg) image </span>
           </div>
         </div>
         <div id="loading" class="loader" style="display: none"></div>
@@ -358,7 +369,7 @@
     fetch("https://api.remove.bg/v1.0/removebg", {
       method: "POST",
       headers: {
-        "X-Api-Key": apiKey, 
+        "X-Api-Key": apiKey,
       },
       body: formData,
     })
@@ -374,10 +385,10 @@
 
         before.src = imgLink;
         after.src = imageURL;
-        
+
         let contain1 = document.querySelector("#c1");
         let contain2 = document.querySelector("#c2");
-        
+
         loading.style.display = "none";
         contain1.style.display = "none";
         contain2.style.display = "flex";

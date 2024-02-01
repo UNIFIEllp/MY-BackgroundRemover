@@ -28,6 +28,8 @@
         border-radius: 20px;
         height: 300px;
         width: 500px;
+        position: relative;
+        object-fit: contain;
         display: grid;
         place-items: center;
         background-color: rgb(255, 255, 255);
@@ -56,10 +58,6 @@
       .inner_content span {
         font-size: 14px;
         color: rgb(192, 106, 22);
-      }
-
-      #imamge_select {
-        display: none;
       }
 
       /* image before and after css */
@@ -97,7 +95,7 @@
       .image-container {
         max-width: 800px;
         max-height: 90vh;
-        aspect-ratio: 1/1;
+        /* aspect-ratio: 1/1; */
       }
 
       .slider-image {
@@ -111,7 +109,6 @@
         position: absolute;
         inset: 0;
         width: var(--position);
-        filter: grayscale(100%);
       }
 
       .slider {
@@ -119,7 +116,6 @@
         inset: 0;
         cursor: pointer;
         opacity: 0;
-        /* for Firefox */
         width: 100%;
         height: 100%;
       }
@@ -164,6 +160,9 @@
         border: 16px solid #f3f3f3; /* Light grey */
         border-top: 16px solid #dba134; /* Blue */
         border-radius: 50%;
+        position: absolute;
+        top: 20%;
+        left: 45%;
         width: 50px;
         height: 50px;
         animation: spin 1s linear infinite;
@@ -177,35 +176,63 @@
           transform: rotate(360deg);
         }
       }
+
+      .result_box {
+        display: flex;
+      }
+
+      .result_box > *:first-child {
+        flex: 8;
+      }
+
+      .result_box > *:nth-child(2) {
+        flex: 3;
+        display: grid;
+        place-items: center;
+      }
+
+      #download_btn {
+        background-color: rgb(255, 134, 22);
+        padding: 6px 20px;
+        color: white;
+        border: 0;
+        font-size: large;
+        border-radius: 10px;
+      }
     </style>
   </head>
   <body>
-    <div class="dropContainer">
-      <label for="input-file" id="drop_box">
-        <input type="file" id="imamge_select" />
+    <div class="dropContainer" id="c1">
+      <label for="input_file" id="drop_box">
+        <input type="file" id="input_file" accept="image/png, image/jpeg" hidden />
         <div class="inner_content">
-          <div class="box_icon">
-            <img src="./uploadicon.png" id="icon" alt="img" />
+          <div id="show_selection"></div>
+          <div id="in_text">
+            <div class="box_icon">
+              <img src="./uploadicon.png" id="icon" alt="img" />
+            </div>
+            <p>
+              Drag and Drop or click here <br />
+              to upload image
+            </p>
+            <span> Upload any image from desktop </span>
           </div>
-          <p>
-            Drag and Drop or click here <br />
-            to upload image
-          </p>
-          <span> Upload any image from desktop </span>
         </div>
         <div id="loading" class="loader" style="display: none"></div>
       </label>
     </div>
-    <div>
+    <div class="result_box" id="c2">
       <main>
         <div class="container">
           <div class="image-container">
             <img
+              id="img_before"
               class="image-before slider-image"
               src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
               alt="color photo"
             />
             <img
+              id="img_after"
               class="image-after slider-image"
               src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
               alt="black and white"
@@ -283,51 +310,84 @@
           </div>
         </div>
       </main>
+
+      <div>
+        <button onclick="downloadFile()" id="download_btn">
+          Download image
+        </button>
+      </div>
     </div>
   </body>
 </html>
 
-<script> 
+<script>
+  //  for slider movement
   const container = document.querySelector(".container");
   document.querySelector(".slider").addEventListener("input", (e) => {
     container.style.setProperty("--position", `${e.target.value}%`);
   });
 
+  // topast image inside the box
+  const imagedropbox = document.getElementById("drop_box");
+  const imagefile = document.getElementById("input_file");
+  const imageshow = document.getElementById("show_selection");
+  const removeInner = document.getElementById("in_text");
   let imageURL;
 
-  function submitHandler() {
-    console.log("click");
-    const fileInput = document.getElementById("fileInput");
-    console.log(fileInput.files);
-    const image = fileInput.files[0];
+  imagefile.addEventListener("change", showimage);
+  function showimage() {
+    let loading = document.getElementById("loading");
+    loading.style.display = "block";
+    removeInner.style.display = "none";
+    let imgLink = URL.createObjectURL(imagefile.files[0]);
+    let newimg = document.createElement("img");
+    newimg.src = imgLink;
+    newimg.style.height = "200px";
+    imageshow.innerHTML = "";
+    imageshow.append(newimg);
+
+    const image = imagefile.files[0];
 
     // Multipart file
     const formData = new FormData();
     formData.append("image_file", image);
     formData.append("size", "auto");
 
-    const apiKey = "PASTE_YOUR_API_KEY";
+    const apiKey = "3zJKVvUicmNaoVFV89G3aG69";
 
     fetch("https://api.remove.bg/v1.0/removebg", {
       method: "POST",
       headers: {
-        "X-Api-Key": apiKey,
+        "X-Api-Key": apiKey, 
       },
       body: formData,
     })
-      .then(function (reponse) {
+      .then((reponse) => {
         return reponse.blob();
       })
-      .then(function (blob) {
+      .then((blob) => {
         console.log(blob);
         const url = URL.createObjectURL(blob);
         imageURL = url;
-        const img = document.createElement("img");
-        img.src = url;
-        document.body.appendChild(img);
+        const before = document.querySelector("#img_before");
+        const after = document.querySelector("#img_after");
+
+        before.src = imgLink;
+        after.src = imageURL;
+        
+        let contain1 = document.querySelector("#c1");
+        let contain2 = document.querySelector("#c2");
+        
+        loading.style.display = "none";
+        contain1.style.display = "none";
+        contain2.style.display = "flex";
       })
-      .catch();
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+  //  for image to show difference between the image it was befor and after
 
   function downloadFile() {
     var anchorElement = document.createElement("a"); //<a></a>

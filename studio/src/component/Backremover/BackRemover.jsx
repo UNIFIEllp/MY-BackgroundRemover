@@ -2,10 +2,8 @@ import React from 'react'
 
 const BackRemover = () => {
   return (
-    <div>
-        
-    </div>
+    <div>BackRemover</div>
   )
 }
 
-export default BackRemover
+export default BackRemover 

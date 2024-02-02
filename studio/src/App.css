@@ -1,26 +1,60 @@
 .App {
   text-align: center;
+  display: grid;
+  place-items: center; 
+  position: relative;   
 }
 
 .dropContainer {
   height: 100vh;
-  margin: auto; 
-  display: grid;
-  place-items: center;
-  background-color: rgb(255, 230, 0);
+  display: grid; 
+  margin: auto;  
+  place-items: center; 
+  width: 100%; 
+  background-color: rgb(0, 153, 255);
 }
 
+
 #drop_box {
-  border: 2px solid black;
+  box-shadow: rgba(60, 64, 67, 0.3) 1px 1px 2px 1px, rgba(0, 0, 0, 0.274) 0px 1px 3px 1px; 
   padding: 20px;
   border-radius: 20px;
   height: 300px;
-  width: 500px;
+  width: 500px; 
   position: relative;
   object-fit: contain;
   display: grid;
   place-items: center;
   background-color: rgb(255, 255, 255);
+}
+
+.flexdown{
+  display: flex; 
+  flex-direction: column; 
+  gap: 30px; 
+} 
+
+.btn_box{
+  display: flex; 
+  gap: 20px;
+}
+
+.btn_box button{
+  padding: 8px 14px; 
+  border: 0; 
+  border-radius: 2px;    
+  font-size: 15px;   
+  cursor: pointer;  
+} 
+
+.remover{
+  background-color: rgb(0, 102, 255); 
+  color: white;  
+} 
+
+.adder{ 
+  background-color: rgb(255, 123, 0); 
+  color: white; 
 }
 
 #icon {
@@ -36,7 +70,11 @@
 }
 
 .inner_content {
-  text-align: center;
+  display: grid; 
+  text-align: center; 
+  width: 100%; 
+  place-items: center; 
+  object-fit: contain;
 }
 
 .inner_content p {
@@ -66,24 +104,36 @@ img {
 
 main {
   display: grid;
-  place-items: center;
-  min-height: 100vh;
-  border: 1px solid black;
+  place-items: center; 
 }
 
 .container {
-  display: grid;
+  display: grid;  
   place-content: center;
   position: relative;
   overflow: hidden;
-  border-radius: 1rem;
-  --position: 50%;
-}
+  border-radius: 1rem; 
+  background-color: white;   
+  padding: 20px;
+} 
 
 .image-container {
   max-width: 800px;
-  max-height: 90vh;
+  max-height: 90vh; 
   /* aspect-ratio: 1/1; */
+}
+
+.maximg{ 
+  width: 100%; 
+  height: 240px;  
+  text-align: center; 
+}
+
+.maximg>img{ 
+  object-fit: cover; 
+  max-width: 100%; 
+  max-height: 100%; 
+  margin: auto; 
 }
 
 .slider-image {
@@ -142,8 +192,7 @@ main {
 }
 
 /* CSS for the loader */
-.loader {
-  display: block;
+.loader { 
   margin: 50px auto;
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #dba134; /* Blue */
@@ -186,6 +235,54 @@ main {
   border: 0;
   font-size: large;
   border-radius: 10px;
+}
+
+.stored_images{
+  position: absolute;  
+  bottom: 20px; 
+  left: 20px; 
+  display: flex; 
+  gap: 20px; 
+}
+
+.stored_images div{
+  padding: 0;   
+  margin: 0;  
+  border-radius: 20px;   
+  background-color: #dbdbdb; 
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
+}
+
+.stored_images img{
+  width: 100px; 
+  height: 100px; 
+  object-fit: contain;  
+}
+
+.difference_box{
+  position: fixed; 
+  top: 0; 
+  bottom: 0; 
+  left: 0; 
+  right: 0;  
+  align-items: center;
+  place-items: center; 
+  background-color: #ffffff65;
+}  
+
+.close{
+  display: flex; 
+  width: 100%;
+  align-items: center;  
+  justify-content: end;  
+}
+
+.close button{
+  width: 30px; 
+  height: 30px;  
+  display: flex; 
+  align-items: center;  
+  justify-content: center; 
 }
 
 @media screen and (max-width: 980px) {

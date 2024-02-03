@@ -6,8 +6,9 @@ const ShowBox = ({data}) => {
   return (
     <div className="stored_images">
       {data?.map((e, i) => (
-        <div>
-          <img src={URL.createObjectURL(e)} alt="" />
+        <div key={i}>  
+          {console.log(e)} 
+          {/* <img src={URL.createObjectURL(e.Blob)} alt="" /> */}
         </div> 
       ))}  
       

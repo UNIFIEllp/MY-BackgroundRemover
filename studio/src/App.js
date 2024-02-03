@@ -21,6 +21,7 @@ function App() {
   const [position, setPosition] = useState(50);
   const [loading, setLoading] = useState(false);
   const [isDraging, setIsDraging] = useState(false);
+  const [saveName, setSaveName] = useState("");
 
   const ondragleave = (event) => {
     event.preventDefault();
@@ -46,18 +47,17 @@ function App() {
     if (files.length === 0) {
       return;
     }
-
     console.log("droped");
   };
 
   const handlesaveimg = (e) => {
     setShowimgbox("grid");
-    if(e?.target?.files[0]){
+    if (e?.target?.files[0]) {
       setImg(URL.createObjectURL(e?.target?.files[0]) || "");
       console.log(URL.createObjectURL(e?.target?.files[0]));
       setPresent(e?.target?.files[0]);
       setShowbox1("");
-      setShowbox2(""); 
+      setShowbox2("");
     }
   };
 
@@ -69,16 +69,16 @@ function App() {
     setLoading(true);
     setShowbox1(img);
     console.log(image);
-
+    setSaveName(image.name); 
     const formData = new FormData();
     formData.append("image_file", image);
     formData.append("size", "auto");
 
-    const apiKey = "3zJKVvUicmNaoVFV89G3aG69";
+    const apiKey = "H8wnkhKWqcswuA2iZgL3yNEp";
 
     await fetch("https://api.remove.bg/v1.0/removebg", {
       method: "POST",
-      headers: {
+      headers: { 
         "X-Api-Key": apiKey,
       },
       body: formData,
@@ -87,12 +87,22 @@ function App() {
         return reponse.blob();
       })
       .then((blob) => {
-        setBox((prev) => [...prev, blob]);
-        const url = URL.createObjectURL(blob);
-        console.log(url);
-        setShowbox2(url);
-        setRemoved(true);
-        setLoading(false);
+        let ar = [blob, saveName];
+        setBox((prev) => [...prev, ar]);
+        console.log(blob);
+        if (blob.type != "application/json") { 
+          const url = URL.createObjectURL(blob);
+          console.log(url);
+          setShowbox2(url);
+          setRemoved(true);
+          setLoading(false);
+        } else {
+          const url = URL.createObjectURL(blob);
+          console.log(url);
+          setShowbox2(url);
+          setRemoved(true);
+          setLoading(false);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -168,14 +178,14 @@ function App() {
       >
         <main>
           <div className="close">
-            <button className="close" onClick={() => setRemoved(false)}>
+            <button onClick={() => setRemoved(false)}>
               <IoClose />
             </button>
           </div>
           <div class="container" style={{ "--position": `${position}%` }}>
             <div class="image-container">
               <img
-                id="img_before"
+                id="image-before"
                 class="image-before slider-image"
                 src={showbox1}
                 alt="color photo"
@@ -203,9 +213,9 @@ function App() {
             </div>
           </div>
         </main>
-      </div> 
+      </div>
 
-      <ShowBox box={box} />  
+      <ShowBox data={box} />
     </div>
   );
 }

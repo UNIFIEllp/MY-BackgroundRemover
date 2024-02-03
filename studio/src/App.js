@@ -52,11 +52,13 @@ function App() {
 
   const handlesaveimg = (e) => {
     setShowimgbox("grid");
-    setImg(URL.createObjectURL(e?.target?.files[0]) || "");
-    console.log(URL.createObjectURL(e?.target?.files[0]));
-    setPresent(e?.target?.files[0]);
-    setShowbox1("");
-    setShowbox2("");
+    if(e?.target?.files[0]){
+      setImg(URL.createObjectURL(e?.target?.files[0]) || "");
+      console.log(URL.createObjectURL(e?.target?.files[0]));
+      setPresent(e?.target?.files[0]);
+      setShowbox1("");
+      setShowbox2(""); 
+    }
   };
 
   const handleSliderChange = (e) => {
